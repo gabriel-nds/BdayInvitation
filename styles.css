@@ -216,12 +216,13 @@ h1.pixel-text {
     overflow: hidden;
 }
 
-#floatingAvatar {
+.floating-figure {
     position: absolute;
     width: 160px;
     max-width: 40vw;
     opacity: 0.7;
     filter: drop-shadow(0 8px 32px rgba(0,0,0,0.3));
-    transition: opacity 0.3s;
+    transition: opacity 0.3s, transform 0.3s;
     will-change: transform;
+    pointer-events: none;
 } 

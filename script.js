@@ -99,19 +99,85 @@ inputs.forEach(input => {
     });
 });
 
-// Flutuando a imagem de fundo (avatar)
-const floatingAvatar = document.getElementById('floatingAvatar');
-let t = 0;
-function animateFloatingAvatar() {
-    // Movimento horizontal e vertical suave
-    const amplitudeX = window.innerWidth * 0.4;
-    const amplitudeY = window.innerHeight * 0.2;
-    const centerX = window.innerWidth / 2 - (floatingAvatar.offsetWidth / 2);
-    const centerY = window.innerHeight / 2 - (floatingAvatar.offsetHeight / 2);
-    const x = centerX + Math.sin(t) * amplitudeX;
-    const y = centerY + Math.cos(t * 0.7) * amplitudeY;
-    floatingAvatar.style.transform = `translate(${x}px, ${y}px)`;
-    t += 0.005;
-    requestAnimationFrame(animateFloatingAvatar);
+// Função para embaralhar arrays (Fisher-Yates)
+function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
 }
-if (floatingAvatar) animateFloatingAvatar(); 
+
+// Flutuando múltiplas figuras de fundo (avatares, chapéus, balões)
+let floatingFigures = Array.from(document.querySelectorAll('.floating-figure'));
+floatingFigures = shuffleArray(floatingFigures);
+
+// Função utilitária para distribuir pontos em grid (espalhamento)
+function generateGridPositions(count, xSpread, ySpread, xOffset, yOffset) {
+    const cols = Math.ceil(Math.sqrt(count));
+    const rows = Math.ceil(count / cols);
+    const positions = [];
+    for (let i = 0; i < count; i++) {
+        const col = i % cols;
+        const row = Math.floor(i / cols);
+        const x = xOffset + (col / (cols - 1 || 1)) * xSpread;
+        const y = yOffset + (row / (rows - 1 || 1)) * ySpread;
+        positions.push({x, y});
+    }
+    return positions;
+}
+
+// Parâmetros para clusters verticais (mais abertos no Y)
+const verticalCount = floatingFigures.length;
+const verticalGrid = generateGridPositions(verticalCount, window.innerWidth * 0.7, window.innerHeight * 0.7, window.innerWidth * 0.15, window.innerHeight * 0.15);
+const verticalParams = Array.from({length: verticalCount}).map((_, i) => ({
+    amplitudeX: window.innerWidth * (0.18 + Math.random() * 0.25),
+    amplitudeY: window.innerHeight * (0.45 + Math.random() * 0.5),
+    speed: 0.002 + Math.random() * 0.012,
+    phase: Math.random() * Math.PI * 2,
+    phaseY: Math.random() * Math.PI * 2,
+    baseX: verticalGrid[i].x,
+    baseY: verticalGrid[i].y
+}));
+// Parâmetros para clusters horizontais (mais abertos no X)
+const horizontalCount = Math.ceil(floatingFigures.length * 0.7);
+const horizontalGrid = generateGridPositions(horizontalCount, window.innerWidth * 0.7, window.innerHeight * 0.7, window.innerWidth * 0.15, window.innerHeight * 0.15);
+const horizontalParams = Array.from({length: horizontalCount}).map((_, i) => ({
+    amplitudeX: window.innerWidth * (0.45 + Math.random() * 0.4),
+    amplitudeY: window.innerHeight * (0.13 + Math.random() * 0.18),
+    speed: 0.001 + Math.random() * 0.012,
+    phase: Math.random() * Math.PI * 2,
+    phaseY: Math.random() * Math.PI * 2,
+    baseX: horizontalGrid[i].x,
+    baseY: horizontalGrid[i].y
+}));
+// Junta todos os parâmetros
+const allParams = [...verticalParams, ...horizontalParams];
+// Duplicar as figuras para preencher mais
+const allFigures = [
+    ...floatingFigures,
+    ...Array.from(floatingFigures).map((f, i) => {
+        const clone = f.cloneNode(true);
+        clone.dataset.gridIndex = i + verticalCount; // para garantir posição única
+        return clone;
+    }),
+    ...Array.from(floatingFigures).map((f, i) => {
+        const clone = f.cloneNode(true);
+        clone.dataset.gridIndex = i + verticalCount + horizontalCount; // para garantir posição única
+        return clone;
+    })
+];
+// Adiciona as figuras extras ao DOM
+const floatingBg = document.querySelector('.floating-bg');
+allFigures.slice(floatingFigures.length).forEach(f => floatingBg.appendChild(f));
+function animateFloatingFigures() {
+    allFigures.forEach((fig, i) => {
+        const p = allParams[i % allParams.length];
+        const t = Date.now() * p.speed + p.phase;
+        const x = p.baseX + Math.cos(t) * p.amplitudeX;
+        const y = p.baseY + Math.sin(t + p.phaseY) * p.amplitudeY;
+        fig.style.transform = `translate(${x}px, ${y}px)` + (fig.style.transform.includes('scaleX(-1)') ? ' scaleX(-1)' : '');
+    });
+    requestAnimationFrame(animateFloatingFigures);
+}
+if (allFigures.length) animateFloatingFigures(); 
