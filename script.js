@@ -73,7 +73,7 @@ function isValidEmail(email) {
 async function sendToGoogleSheets(name, email) {
     // IMPORTANTE: Substitua YOUR_SCRIPT_ID pelo ID do seu Google Apps Script
     // Você vai obter este ID depois de criar o script no Google Apps Script
-    const WEBHOOK_URL = 'https://script.google.com/macros/s/https://script.google.com/macros/s/AKfycbxH685tWFsAeZXUg6mXaR3pP7mWS0T9FJtIE4xnk_8DOl48oTqE0geC8nQTUehfFXWFMw/exec/exec';
+    const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbxH685tWFsAeZXUg6mXaR3pP7mWS0T9FJtIE4xnk_8DOl48oTqE0geC8nQTUehfFXWFMw/exec';
     
     try {
         const response = await fetch(WEBHOOK_URL, {

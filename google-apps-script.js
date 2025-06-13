@@ -3,6 +3,16 @@
 
 function doPost(e) {
   try {
+    // Verificar se os dados POST existem
+    if (!e || !e.postData || !e.postData.contents) {
+      return ContentService
+        .createTextOutput(JSON.stringify({
+          success: false,
+          message: 'Dados não recebidos. Este endpoint deve ser chamado via POST.'
+        }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+    
     // ID da sua planilha
     const SHEET_ID = '1AHlizYONfLoEPl4sxuQyNm8vQiCd5BKEh1WvmrYcLz0';
     
@@ -85,12 +95,12 @@ function doPost(e) {
   }
 }
 
-// Função para testar o script
+// Função para testar o script (simula uma requisição POST)
 function testScript() {
   const testData = {
     postData: {
       contents: JSON.stringify({
-        name: 'Teste',
+        name: 'Teste Gabriel',
         email: 'teste@gmail.com',
         timestamp: new Date().toISOString(),
         userAgent: 'Test Browser'
@@ -99,5 +109,11 @@ function testScript() {
   };
   
   const result = doPost(testData);
+  console.log(result.getContent());
+}
+
+// Função para testar sem dados POST (simula o erro que você teve)
+function testWithoutData() {
+  const result = doPost({});
   console.log(result.getContent());
 } 
