@@ -25,7 +25,7 @@ body {
 
 .container {
     width: 100%;
-    max-width: 370px;
+    max-width: 380px;
     padding: 10px;
     position: relative;
     z-index: 1;
@@ -61,6 +61,12 @@ body {
 
 .pixel-text.small {
     font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+    color: var(--tropical-yellow);
+}
+
+.pixel-text.date {
+    font-size: 1.2rem;
     margin-bottom: 0.5rem;
     color: var(--tropical-yellow);
 }
@@ -197,6 +203,10 @@ h1.pixel-text {
 
     .pixel-text.small {
         font-size: 0.7rem;
+    }
+
+    .pixel-text.date {
+        font-size: 1rem;
     }
 
     .pixel-button {

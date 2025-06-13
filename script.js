@@ -28,9 +28,9 @@ function animate() {
     requestAnimationFrame(animate);
     
     particles.forEach(particle => {
-        particle.rotation.x += 0.01;
-        particle.rotation.y += 0.01;
-        particle.position.y += Math.sin(Date.now() * 0.001 + particle.position.x) * 0.01;
+        particle.rotation.x += 0.0075;
+        particle.rotation.y += 0.0075;
+        particle.position.y += Math.sin(Date.now() * 0.00075 + particle.position.x) * 0.0075;
     });
 
     renderer.render(scene, camera);
@@ -70,7 +70,7 @@ if (form) {
         
         // Alterar texto do botão e manter visível
         const submitButton = form.querySelector('.pixel-button');
-        submitButton.textContent = 'Que isso, aí já é demais kkkk';
+        submitButton.textContent = 'Esse botao nao funciona, mas show, só chegar! kkkk :)';
         submitButton.style.background = 'var(--tropical-green)';
         submitButton.disabled = true;
         
@@ -147,7 +147,7 @@ const verticalGrid = generateGridPositions(verticalCount, window.innerWidth * 0.
 const verticalParams = Array.from({length: verticalCount}).map((_, i) => ({
     amplitudeX: window.innerWidth * (0.25 + Math.random() * 0.35), // aumentado de 0.15-0.35 para 0.25-0.6
     amplitudeY: window.innerHeight * (0.4 + Math.random() * 0.5), // aumentado de 0.3-0.7 para 0.4-0.9
-    speed: 0.003 + Math.random() * 0.005, // mantém igual
+    speed: 0.00225 + Math.random() * 0.00375, // reduzido 25%
     phase: Math.random() * Math.PI * 2,
     phaseY: Math.random() * Math.PI * 2,
     baseX: verticalGrid[i].x,
@@ -160,7 +160,7 @@ const horizontalGrid = generateGridPositions(horizontalCount, window.innerWidth 
 const horizontalParams = Array.from({length: horizontalCount}).map((_, i) => ({
     amplitudeX: window.innerWidth * (0.35 + Math.random() * 0.4), // aumentado de 0.25-0.55 para 0.35-0.75
     amplitudeY: window.innerHeight * (0.15 + Math.random() * 0.25), // aumentado de 0.1-0.25 para 0.15-0.4
-    speed: 0.003 + Math.random() * 0.005, // mantém igual
+    speed: 0.00225 + Math.random() * 0.00375, // reduzido 25%
     phase: Math.random() * Math.PI * 2,
     phaseY: Math.random() * Math.PI * 2,
     baseX: horizontalGrid[i].x,
