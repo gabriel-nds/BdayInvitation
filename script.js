@@ -145,6 +145,10 @@ if (form) {
         // Enviar para Google Sheets
         await sendToGoogleSheets(name, email);
         
+        // Alterar texto do botão
+        submitButton.textContent = 'Que isso, aí já é demais kkkk';
+        submitButton.style.background = 'var(--tropical-green)';
+        
         // Mostrar confirmação
         form.style.display = 'none';
         confirmation.classList.remove('hidden');
