@@ -43,7 +43,6 @@ window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
-    t = 0;
 });
 
 // Validação de email mais rigorosa
@@ -61,7 +60,12 @@ function isValidEmail(email) {
         return false;
     }
     
-    const domain = email.split('@')[1].toLowerCase();
+    const emailParts = email.split('@');
+    if (emailParts.length !== 2) {
+        return false;
+    }
+    
+    const domain = emailParts[1].toLowerCase();
     if (disposableEmailDomains.includes(domain)) {
         return false;
     }
@@ -71,8 +75,8 @@ function isValidEmail(email) {
 
 // Função para enviar dados para Google Sheets
 async function sendToGoogleSheets(name, email) {
-    // IMPORTANTE: Substitua YOUR_SCRIPT_ID pelo ID do seu Google Apps Script
-    // Você vai obter este ID depois de criar o script no Google Apps Script
+    // IMPORTANTE: Substitua pela URL do seu Google Apps Script implantado
+    // Obtenha esta URL após implantar como "Aplicativo da web" no Google Apps Script
     const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbxH685tWFsAeZXUg6mXaR3pP7mWS0T9FJtIE4xnk_8DOl48oTqE0geC8nQTUehfFXWFMw/exec';
     
     try {
@@ -113,7 +117,8 @@ async function sendToGoogleSheets(name, email) {
 const form = document.getElementById('rsvpForm');
 const confirmation = document.getElementById('confirmation');
 
-form.addEventListener('submit', async (e) => {
+if (form) {
+    form.addEventListener('submit', async (e) => {
     e.preventDefault();
     
     const name = document.getElementById('name').value.trim();
@@ -159,17 +164,20 @@ form.addEventListener('submit', async (e) => {
         submitButton.textContent = originalText;
         submitButton.disabled = false;
     }
-});
+    });
+}
 
 // Add some fun pixel art animations to the button
 const button = document.querySelector('.pixel-button');
-button.addEventListener('mouseover', () => {
-    button.style.transform = 'scale(1.05) translateY(-2px)';
-});
+if (button) {
+    button.addEventListener('mouseover', () => {
+        button.style.transform = 'scale(1.05) translateY(-2px)';
+    });
 
-button.addEventListener('mouseout', () => {
-    button.style.transform = 'scale(1) translateY(0)';
-});
+    button.addEventListener('mouseout', () => {
+        button.style.transform = 'scale(1) translateY(0)';
+    });
+}
 
 // Add some fun to the input fields
 const inputs = document.querySelectorAll('.pixel-input');
@@ -259,7 +267,9 @@ const allFigures = [
 
 // Adiciona as figuras extras ao DOM
 const floatingBg = document.querySelector('.floating-bg');
-allFigures.slice(floatingFigures.length).forEach(f => floatingBg.appendChild(f));
+if (floatingBg) {
+    allFigures.slice(floatingFigures.length).forEach(f => floatingBg.appendChild(f));
+}
 
 function animateFloatingFigures() {
     allFigures.forEach((fig, i) => {

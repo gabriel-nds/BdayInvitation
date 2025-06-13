@@ -35,9 +35,16 @@ function doPost(e) {
       headerRange.setFontColor('white');
     }
     
-    // Verificar se o email já existe
-    const emailColumn = sheet.getRange(2, 2, sheet.getLastRow() - 1, 1).getValues();
-    const emailExists = emailColumn.some(row => row[0] === data.email);
+    // Verificar se o email já existe (apenas se há mais de 1 linha - cabeçalho)
+    let emailExists = false;
+    const currentRows = sheet.getLastRow();
+    if (currentRows > 1) {
+      const numRows = currentRows - 1; // Número de linhas de dados (excluindo cabeçalho)
+      if (numRows > 0) {
+        const emailColumn = sheet.getRange(2, 2, numRows, 1).getValues();
+        emailExists = emailColumn.some(row => row[0] === data.email);
+      }
+    }
     
     if (emailExists) {
       return ContentService
