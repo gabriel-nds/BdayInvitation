@@ -25,8 +25,8 @@ body {
 
 .container {
     width: 100%;
-    max-width: 500px;
-    padding: 20px;
+    max-width: 360px;
+    padding: 10px;
     position: relative;
     z-index: 1;
 }
@@ -45,7 +45,7 @@ body {
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
     border-radius: 20px;
-    padding: 2rem;
+    padding: 1rem;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     border: 2px solid rgba(255, 255, 255, 0.2);
     text-align: center;
@@ -66,7 +66,7 @@ body {
 }
 
 h1.pixel-text {
-    font-size: 2rem;
+    font-size: 1.4rem;
     color: var(--tropical-yellow);
     margin-bottom: 2rem;
 }

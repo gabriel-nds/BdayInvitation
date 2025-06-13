@@ -13,8 +13,8 @@ const particleMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
 for (let i = 0; i < particleCount; i++) {
     const particle = new THREE.Mesh(particleGeometry, particleMaterial);
     particle.position.x = (Math.random() - 0.5) * 5;
-    particle.position.y = (Math.random() - 0.5) * 5;
-    particle.position.z = (Math.random() - 0.5) * 5;
+    particle.position.y = (Math.random() - 0.4) * 5;
+    particle.position.z = (Math.random() - 0.3) * 5;
     particle.rotation.x = Math.random() * Math.PI;
     particle.rotation.y = Math.random() * Math.PI;
     scene.add(particle);
@@ -133,7 +133,7 @@ const verticalGrid = generateGridPositions(verticalCount, window.innerWidth * 0.
 const verticalParams = Array.from({length: verticalCount}).map((_, i) => ({
     amplitudeX: window.innerWidth * (0.18 + Math.random() * 0.25),
     amplitudeY: window.innerHeight * (0.45 + Math.random() * 0.5),
-    speed: 0.002 + Math.random() * 0.012,
+    speed: 0.0008 + Math.random() * 0.02,
     phase: Math.random() * Math.PI * 2,
     phaseY: Math.random() * Math.PI * 2,
     baseX: verticalGrid[i].x,
@@ -145,7 +145,7 @@ const horizontalGrid = generateGridPositions(horizontalCount, window.innerWidth 
 const horizontalParams = Array.from({length: horizontalCount}).map((_, i) => ({
     amplitudeX: window.innerWidth * (0.45 + Math.random() * 0.4),
     amplitudeY: window.innerHeight * (0.13 + Math.random() * 0.18),
-    speed: 0.001 + Math.random() * 0.012,
+    speed: 0.0007 + Math.random() * 0.02,
     phase: Math.random() * Math.PI * 2,
     phaseY: Math.random() * Math.PI * 2,
     baseX: horizontalGrid[i].x,
