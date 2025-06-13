@@ -1,0 +1,227 @@
+:root {
+    --tropical-pink: #ff6b6b;
+    --tropical-yellow: #ffd93d;
+    --tropical-green: #6bcb77;
+    --tropical-blue: #4d96ff;
+    --tropical-purple: #9d4edd;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Quicksand', sans-serif;
+    background: linear-gradient(135deg, var(--tropical-blue), var(--tropical-purple));
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    overflow-x: hidden;
+}
+
+.container {
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.pixel-art-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0.1;
+}
+
+.content {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    text-align: center;
+}
+
+.pixel-text {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.2);
+    line-height: 1.4;
+}
+
+.pixel-text.small {
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+    color: var(--tropical-yellow);
+}
+
+h1.pixel-text {
+    font-size: 2rem;
+    color: var(--tropical-yellow);
+    margin-bottom: 2rem;
+}
+
+.message-box {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin: 2rem 0;
+}
+
+.pixel-divider {
+    height: 4px;
+    background: var(--tropical-yellow);
+    margin: 1rem 0;
+    position: relative;
+}
+
+.pixel-divider::before,
+.pixel-divider::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: var(--tropical-yellow);
+    top: -2px;
+}
+
+.pixel-divider::before {
+    left: 20%;
+}
+
+.pixel-divider::after {
+    right: 20%;
+}
+
+.rsvp-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.form-group {
+    position: relative;
+}
+
+.pixel-input {
+    width: 100%;
+    padding: 1rem;
+    border: 3px solid var(--tropical-yellow);
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 1rem;
+    transition: transform 0.2s;
+}
+
+.pixel-input:focus {
+    outline: none;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
+}
+
+.pixel-button {
+    background: var(--tropical-pink);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.8rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-transform: uppercase;
+    margin-top: 1rem;
+}
+
+.pixel-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.2);
+}
+
+.pixel-button:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+.confirmation {
+    margin-top: 2rem;
+    padding: 1rem;
+    background: var(--tropical-green);
+    border-radius: 8px;
+    animation: fadeIn 0.5s ease-in;
+}
+
+.confirmation.hidden {
+    display: none;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.address {
+    margin-top: 3rem;
+    padding-top: 1rem;
+    border-top: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 10px;
+    }
+
+    .content {
+        padding: 1.5rem;
+    }
+
+    h1.pixel-text {
+        font-size: 1.5rem;
+    }
+
+    .pixel-text {
+        font-size: 1rem;
+    }
+
+    .pixel-text.small {
+        font-size: 0.7rem;
+    }
+
+    .pixel-button {
+        font-size: 0.7rem;
+        padding: 0.8rem 1.5rem;
+    }
+}
+
+.floating-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+#floatingAvatar {
+    position: absolute;
+    width: 160px;
+    max-width: 40vw;
+    opacity: 0.7;
+    filter: drop-shadow(0 8px 32px rgba(0,0,0,0.3));
+    transition: opacity 0.3s;
+    will-change: transform;
+} 

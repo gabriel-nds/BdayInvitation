@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎉 Cola Aqui! 🎉</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+    <div class="floating-bg">
+        <img src="avatar.png" alt="Avatar Pixel Art" id="floatingAvatar" />
+    </div>
+    <div class="container">
+        <div class="pixel-art-container">
+            <canvas id="pixelCanvas"></canvas>
+        </div>
+
+        <div class="content">
+            <h1 class="pixel-text">Cola Aqui!</h1>
+            
+            <div class="message-box">
+                <p class="pixel-text">na véspera do feriado!</p>
+                <div class="pixel-divider"></div>
+            </div>
+
+            <form id="rsvpForm" class="rsvp-form">
+                <div class="form-group">
+                    <input type="text" id="name" name="name" required placeholder="Seu nome" class="pixel-input">
+                </div>
+                <div class="form-group">
+                    <input type="email" id="email" name="email" required placeholder="Seu email" class="pixel-input">
+                </div>
+                <button type="submit" class="pixel-button">Confirmar Presença!</button>
+            </form>
+
+            <div id="confirmation" class="confirmation hidden">
+                <p class="pixel-text">Obrigado! Te espero lá! 🎉</p>
+            </div>
+
+            <div class="address">
+                <p class="pixel-text small">Tavares Bastos, 61</p>
+                <p class="pixel-text small">Apto 602</p>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html> 
