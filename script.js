@@ -46,34 +46,118 @@ window.addEventListener('resize', () => {
     t = 0;
 });
 
-// Form handling
+// Validação de email mais rigorosa
+function isValidEmail(email) {
+    // Regex mais rigoroso para emails reais
+    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+    
+    // Lista de domínios temporários/descartáveis comuns para bloquear
+    const disposableEmailDomains = [
+        '10minutemail.com', 'tempmail.org', 'guerrillamail.com', 'mailinator.com',
+        'yopmail.com', 'temp-mail.org', 'throwaway.email', 'getnada.com'
+    ];
+    
+    if (!emailRegex.test(email)) {
+        return false;
+    }
+    
+    const domain = email.split('@')[1].toLowerCase();
+    if (disposableEmailDomains.includes(domain)) {
+        return false;
+    }
+    
+    return true;
+}
+
+// Função para enviar dados para Google Sheets
+async function sendToGoogleSheets(name, email) {
+    // IMPORTANTE: Substitua YOUR_SCRIPT_ID pelo ID do seu Google Apps Script
+    // Você vai obter este ID depois de criar o script no Google Apps Script
+    const WEBHOOK_URL = 'https://script.google.com/macros/s/https://script.google.com/macros/s/AKfycbxH685tWFsAeZXUg6mXaR3pP7mWS0T9FJtIE4xnk_8DOl48oTqE0geC8nQTUehfFXWFMw/exec/exec';
+    
+    try {
+        const response = await fetch(WEBHOOK_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: name,
+                email: email,
+                timestamp: new Date().toISOString(),
+                userAgent: navigator.userAgent
+            })
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const result = await response.json();
+        
+        if (!result.success) {
+            if (result.message === 'Este email já foi cadastrado!') {
+                throw new Error('DUPLICATE_EMAIL');
+            }
+            throw new Error(result.message || 'Erro desconhecido');
+        }
+        
+        return result;
+    } catch (error) {
+        console.error('Erro ao enviar para Google Sheets:', error);
+        throw error;
+    }
+}
+
+// Form handling atualizado
 const form = document.getElementById('rsvpForm');
 const confirmation = document.getElementById('confirmation');
 
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
     
-    const formData = {
-        name: document.getElementById('name').value,
-        email: document.getElementById('email').value
-    };
-
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    
+    // Validações
+    if (!name || name.length < 2) {
+        alert('Por favor, digite um nome válido (mínimo 2 caracteres).');
+        return;
+    }
+    
+    if (!isValidEmail(email)) {
+        alert('Por favor, digite um email válido e real. Emails temporários não são aceitos.');
+        return;
+    }
+    
+    // Mostrar loading
+    const submitButton = form.querySelector('.pixel-button');
+    const originalText = submitButton.textContent;
+    submitButton.textContent = 'Enviando...';
+    submitButton.disabled = true;
+    
     try {
-        // Here you would typically send the data to your email
-        // For now, we'll just simulate a successful submission
-        console.log('RSVP Data:', formData);
+        // Enviar para Google Sheets
+        await sendToGoogleSheets(name, email);
         
-        // Show confirmation message
+        // Mostrar confirmação
         form.style.display = 'none';
         confirmation.classList.remove('hidden');
         
-        // You can add your email sending logic here
-        // For example, using a service like EmailJS or your own backend
-        // For now, we'll just log the data that would be sent to gndsantos@gmail.com
+        console.log('RSVP enviado com sucesso:', { name, email });
         
     } catch (error) {
-        console.error('Error submitting form:', error);
-        alert('Ops! Algo deu errado. Tente novamente!');
+        console.error('Erro ao enviar RSVP:', error);
+        
+        if (error.message === 'DUPLICATE_EMAIL') {
+            alert('Este email já foi cadastrado! Se você já confirmou presença, não precisa fazer novamente.');
+        } else {
+            alert('Ops! Algo deu errado ao enviar sua confirmação. Verifique sua conexão e tente novamente.');
+        }
+        
+        // Restaurar botão
+        submitButton.textContent = originalText;
+        submitButton.disabled = false;
     }
 });
 
