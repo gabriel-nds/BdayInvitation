@@ -108,51 +108,75 @@ function shuffleArray(arr) {
     return arr;
 }
 
+// Flutuando múltiplas figuras de fundo (avatares, chapéus, balões)
 let floatingFigures = Array.from(document.querySelectorAll('.floating-figure'));
 floatingFigures = shuffleArray(floatingFigures);
 
-// Gera posições únicas embaralhadas para cada figura
-const totalFigures = floatingFigures.length * 3;
-const gridPositions = shuffleArray(generateGridPositions(totalFigures, window.innerWidth * 0.7, window.innerHeight * 0.7, window.innerWidth * 0.15, window.innerHeight * 0.15));
+// Função utilitária para distribuir pontos em grid (espalhamento)
+function generateGridPositions(count, xSpread, ySpread, xOffset, yOffset) {
+    const cols = Math.ceil(Math.sqrt(count));
+    const rows = Math.ceil(count / cols);
+    const positions = [];
+    
+    // Adiciona um offset aleatório pequeno para cada posição para evitar alinhamento perfeito
+    for (let i = 0; i < count; i++) {
+        const col = i % cols;
+        const row = Math.floor(i / cols);
+        const baseX = xOffset + (col / (cols - 1 || 1)) * xSpread;
+        const baseY = yOffset + (row / (rows - 1 || 1)) * ySpread;
+        
+        // Adiciona variação aleatória para evitar posições idênticas
+        const x = baseX + (Math.random() - 0.5) * 100;
+        const y = baseY + (Math.random() - 0.5) * 100;
+        
+        positions.push({x, y});
+    }
+    return positions;
+}
 
 // Parâmetros para clusters verticais (mais abertos no Y)
 const verticalCount = floatingFigures.length;
+const verticalGrid = generateGridPositions(verticalCount, window.innerWidth * 0.8, window.innerHeight * 0.8, window.innerWidth * 0.1, window.innerHeight * 0.1);
 const verticalParams = Array.from({length: verticalCount}).map((_, i) => ({
-    amplitudeX: window.innerWidth * (0.18 + Math.random() * 0.25),
-    amplitudeY: window.innerHeight * (0.45 + Math.random() * 0.5),
-    speed: 0.004 + Math.random() * 0.007, // mais devagar
+    amplitudeX: window.innerWidth * (0.25 + Math.random() * 0.35), // aumentado de 0.15-0.35 para 0.25-0.6
+    amplitudeY: window.innerHeight * (0.4 + Math.random() * 0.5), // aumentado de 0.3-0.7 para 0.4-0.9
+    speed: 0.003 + Math.random() * 0.005, // mantém igual
     phase: Math.random() * Math.PI * 2,
     phaseY: Math.random() * Math.PI * 2,
-    baseX: gridPositions[i].x,
-    baseY: gridPositions[i].y
+    baseX: verticalGrid[i].x,
+    baseY: verticalGrid[i].y
 }));
+
 // Parâmetros para clusters horizontais (mais abertos no X)
-const horizontalCount = Math.ceil(floatingFigures.length * 0.7);
+const horizontalCount = Math.ceil(floatingFigures.length * 0.6);
+const horizontalGrid = generateGridPositions(horizontalCount, window.innerWidth * 0.8, window.innerHeight * 0.8, window.innerWidth * 0.1, window.innerHeight * 0.1);
 const horizontalParams = Array.from({length: horizontalCount}).map((_, i) => ({
-    amplitudeX: window.innerWidth * (0.45 + Math.random() * 0.4),
-    amplitudeY: window.innerHeight * (0.13 + Math.random() * 0.18),
-    speed: 0.004 + Math.random() * 0.007, // mais devagar
+    amplitudeX: window.innerWidth * (0.35 + Math.random() * 0.4), // aumentado de 0.25-0.55 para 0.35-0.75
+    amplitudeY: window.innerHeight * (0.15 + Math.random() * 0.25), // aumentado de 0.1-0.25 para 0.15-0.4
+    speed: 0.003 + Math.random() * 0.005, // mantém igual
     phase: Math.random() * Math.PI * 2,
     phaseY: Math.random() * Math.PI * 2,
-    baseX: gridPositions[verticalCount + i].x,
-    baseY: gridPositions[verticalCount + i].y
+    baseX: horizontalGrid[i].x,
+    baseY: horizontalGrid[i].y
 }));
+
+// Junta todos os parâmetros
 const allParams = [...verticalParams, ...horizontalParams];
+
+// Reduzir o número de figuras duplicadas para evitar excesso
 const allFigures = [
     ...floatingFigures,
-    ...Array.from(floatingFigures).map((f, i) => {
+    ...Array.from(floatingFigures).slice(0, Math.ceil(floatingFigures.length * 0.5)).map((f, i) => {
         const clone = f.cloneNode(true);
         clone.dataset.gridIndex = i + verticalCount;
         return clone;
-    }),
-    ...Array.from(floatingFigures).map((f, i) => {
-        const clone = f.cloneNode(true);
-        clone.dataset.gridIndex = i + verticalCount + horizontalCount;
-        return clone;
     })
 ];
+
+// Adiciona as figuras extras ao DOM
 const floatingBg = document.querySelector('.floating-bg');
 allFigures.slice(floatingFigures.length).forEach(f => floatingBg.appendChild(f));
+
 function animateFloatingFigures() {
     allFigures.forEach((fig, i) => {
         const p = allParams[i % allParams.length];
