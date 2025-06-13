@@ -25,7 +25,7 @@ body {
 
 .container {
     width: 100%;
-    max-width: 360px;
+    max-width: 370px;
     padding: 10px;
     position: relative;
     z-index: 1;
